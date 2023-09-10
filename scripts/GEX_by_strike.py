@@ -96,7 +96,7 @@ def plot_gamma_results(gamma_results):
 
     plt.show()
     
-ticker = 'AAPL'
+ticker = 'SPY'
 num_of_strikes = 5
 
 gamma_results = compute_weighted_gamma(ticker, num_of_strikes)
