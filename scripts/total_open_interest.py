@@ -2,10 +2,8 @@ import json
 import os
 from datetime import timedelta, datetime
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import requests
-from matplotlib import dates
 
 ticker = 'SPY'
 
