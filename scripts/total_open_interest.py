@@ -60,3 +60,5 @@ call_total_open_interest = compute_total_open_interest(ticker, 'C')
 put_total_open_interest = compute_total_open_interest(ticker, 'P')
 
 print(f'Total open interest Put/Call ratio: {put_total_open_interest/call_total_open_interest}')
+
+print('Total open interest is expressed as the number of contracts outstanding at the end of the day.')
