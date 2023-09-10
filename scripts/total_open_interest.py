@@ -12,7 +12,7 @@ def scrape_data(ticker='SPY', save_to_file=True):
     # Request data and save it to file
     try:
         data = requests.get(
-            f"https://cdn.cboe.com/api/global/delayed_quotes/options/{ticker}.json"
+            f"https://cdn.cboe.com/api/global/delayed_quotes/options/_{ticker}.json"
         )
         
         if(save_to_file):
