@@ -43,10 +43,7 @@ def fix_option_data(data):
     data["expiration"] = pd.to_datetime(data["expiration"], format="%y%m%d")
     return data
 
-def compute_total_open_interest(ticker, option_type):
-    # Assuming scrape_data returns spot price and option data DataFrame
-    spot_price, option_data = scrape_data(ticker)
-
+def compute_total_open_interest(ticker, option_type, option_data):
     # Filter data based on option type (CALL or PUT)
     option_data = option_data[option_data['type'] == option_type]
 
@@ -56,8 +53,10 @@ def compute_total_open_interest(ticker, option_type):
     
     return total_open_interest
     
-call_total_open_interest = compute_total_open_interest(ticker, 'C')
-put_total_open_interest = compute_total_open_interest(ticker, 'P')
+spot_price, option_data = scrape_data(ticker)
+
+call_total_open_interest = compute_total_open_interest(ticker, 'C', option_data)
+put_total_open_interest = compute_total_open_interest(ticker, 'P', option_data)
 
 print(f'Total open interest Put/Call ratio: {put_total_open_interest/call_total_open_interest}')
 
