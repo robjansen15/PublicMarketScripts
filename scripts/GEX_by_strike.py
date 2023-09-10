@@ -7,8 +7,6 @@ import pandas as pd
 import requests
 from matplotlib import dates
 
-ticker = 'SPY'
-
 def scrape_data(ticker='SPY', save_to_file=True):
     """Scrape data from CBOE website"""
     # Request data and save it to file
@@ -66,7 +64,39 @@ def compute_weighted_gamma(ticker, num_of_strikes):
 
     return gamma_values
 
-ticker = 'SPY'
+def plot_gamma_results(gamma_results):
+    strikes = []
+    total_gammas = []
+
+    for strike, gamma in gamma_results.items():
+        strikes.append(strike)
+        total_gammas.append(gamma['Total'])
+
+    # Plotting
+    plt.figure(figsize=(12,7))
+
+    # Plotting total gamma
+    bars = plt.bar(strikes, total_gammas, alpha=0.8)
+
+    # Color bars and add text label
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval + 5, round(yval, 2), ha='center', va='bottom')
+        if yval > 0:
+            bar.set_color('green')
+        else:
+            bar.set_color('red')
+
+    # Labeling
+    plt.title('Total Gamma Results by Strike')
+    plt.xlabel('Strike')
+    plt.ylabel('Total Gamma')
+    plt.xticks(strikes, [str(s) for s in strikes])  # Add a label on x-axis for each datapoint
+    plt.tight_layout()
+
+    plt.show()
+    
+ticker = 'AAPL'
 num_of_strikes = 5
 
 gamma_results = compute_weighted_gamma(ticker, num_of_strikes)
@@ -77,3 +107,5 @@ for strike, gamma in gamma_results.items():
     print(f"\tTotal: {int(gamma['Total'])}")
     print(f"\t\tC: {int(gamma['C'])}")
     print(f"\t\tP: {int(gamma['P'])}")
+
+plot_gamma_results(gamma_results)
