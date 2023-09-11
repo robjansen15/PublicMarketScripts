@@ -61,9 +61,9 @@ def compute_standard_deviations(filename):
 
 days_back = 30
 
-filename = fetch_and_save_stock_data('SPY', days_back, interval='15m', save_dir='data')
+filename = fetch_and_save_stock_data('^SPX', days_back, interval='15m', save_dir='data')
 results = compute_standard_deviations(filename)
 
 print(f"Mean: {results['MEAN']}")
-print(f"1 STD: {results['1 STD Upper']} - {results['1 STD Lower']}")
-print(f"2 STD: {results['2 STD Upper']} - {results['2 STD Lower']}")
+print(f"1 STD: {results['1 STD Lower']} - {results['1 STD Upper']}")
+print(f"2 STD: {results['2 STD Lower']} - {results['2 STD Upper']}")
