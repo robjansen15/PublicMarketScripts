@@ -55,12 +55,10 @@ def compute_GEX(ticker, num_of_strikes):
 
     for strike in strikes:
         call_gamma_weighted = (option_data[(option_data['type'] == 'C') & (option_data['strike'] == strike)]['gamma'] *
-                               option_data[(option_data['type'] == 'C') & (option_data['strike'] == strike)]['delta'] *
                                spot_price *
                                option_data[(option_data['type'] == 'C') & (option_data['strike'] == strike)]['open_interest']).sum()
         
         put_gamma_weighted = (option_data[(option_data['type'] == 'P') & (option_data['strike'] == strike)]['gamma'] *
-                              option_data[(option_data['type'] == 'P') & (option_data['strike'] == strike)]['delta'] *
                               spot_price *
                               option_data[(option_data['type'] == 'P') & (option_data['strike'] == strike)]['open_interest']).sum()
 
