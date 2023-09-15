@@ -67,42 +67,47 @@ def compute_GEX(ticker, num_of_strikes):
 
     return GEX_values
 
-
 def plot_gamma_results(gamma_results):
-    # Filter out results where total gamma is zero.
-    filtered_results = {strike: gamma for strike, gamma in gamma_results.items() if gamma['Total'] != 0}
+    # Filter out results where both call and put gamma are zero.
+    filtered_results = {strike: gamma for strike, gamma in gamma_results.items() if gamma['C'] != 0 or gamma['P'] != 0}
 
     strikes = list(filtered_results.keys())
-    total_gammas = [gamma['Total'] for gamma in filtered_results.values()]
+    call_gammas = [gamma['C'] for gamma in filtered_results.values()]
+    put_gammas = [-abs(gamma['P']) for gamma in filtered_results.values()]  # Making sure PUT values are negative
 
     # Plotting
     plt.figure(figsize=(12,7))
 
-    # Plotting total gamma
-    bars = plt.bar(strikes, total_gammas, alpha=0.8)
+    # Plotting CALL gamma (green bars)
+    bars_call = plt.bar(strikes, call_gammas, color='green', alpha=0.8, label='CALL')
 
-    # Color bars and add text label
-    for bar in bars:
-        yval = bar.get_height()
-        if yval != 0:  # Only add a label if the gamma value is not 0.
-            plt.text(bar.get_x() + bar.get_width()/2, yval + 5, round(yval, 2), ha='center', va='bottom')
-        if yval > 0:
-            bar.set_color('green')
-        else:
-            bar.set_color('red')
+    # Plotting PUT gamma below x-axis (red bars)
+    bars_put = plt.bar(strikes, put_gammas, color='red', alpha=0.8, label='PUT')
+
+    # Add text label for CALL
+    for bar, gamma in zip(bars_call, call_gammas):
+        if gamma != 0:  # Only add a label if the gamma value is not 0.
+            plt.text(bar.get_x() + bar.get_width()/2, gamma + 5, round(gamma, 2), ha='center', va='bottom')
+
+    # Add text label for PUT
+    for bar, gamma in zip(bars_put, put_gammas):
+        if gamma != 0:  # Only add a label if the gamma value is not 0.
+            plt.text(bar.get_x() + bar.get_width()/2, gamma - 5, round(gamma, 2), ha='center', va='top')
 
     # Adding a horizontal line at y=0
     plt.axhline(y=0, color='black', linestyle='--')
-    
+
     # Labeling
-    plt.title('Total Gamma Results by Strike')
+    plt.title('Gamma Results by Strike for CALLs and PUTs')
     plt.xlabel('Strike')
-    plt.ylabel('Total Gamma')
+    plt.ylabel('Gamma')
     plt.xticks(strikes, [str(s) for s in strikes])  # Add a label on x-axis for each datapoint
+    plt.legend(loc='upper right')
     plt.tight_layout()
 
     plt.show()
-    
+
+
 ticker = 'SPY'
 num_of_strikes = 5
 
